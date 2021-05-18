@@ -9,7 +9,7 @@ import {
   Subject,
   throwError,
 } from 'rxjs';
-import { catchError, map, tap, scan } from 'rxjs/operators';
+import { catchError, map, tap, scan, shareReplay } from 'rxjs/operators';
 
 import { Product } from './product';
 import { Supplier } from '../suppliers/supplier';
@@ -41,7 +41,8 @@ export class ProductService {
             category: categories.find((c) => product.categoryId === c.id).name,
           } as Product)
       )
-    )
+    ),
+    shareReplay(1)
   );
   private productSelectedSubject = new BehaviorSubject<number>(0);
   productSelectedAction$ = this.productSelectedSubject.asObservable();
